@@ -55,7 +55,7 @@ export class IngresoEgresoComponent implements OnInit, OnDestroy {
           .then( () => {
 
             this.store.dispatch( new DesactivarLoadingAction() );
-            Swal('Creado', ingresoEgreso.descripcion, 'success');
+            Swal.fire('Creado', ingresoEgreso.descripcion, 'success');
             this.forma.reset({ monto: 0 });
 
           });

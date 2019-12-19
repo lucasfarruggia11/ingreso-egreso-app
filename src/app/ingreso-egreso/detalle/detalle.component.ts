@@ -36,7 +36,7 @@ export class DetalleComponent implements OnInit, OnDestroy {
   borrarItem(item: IngresoEgreso) {
     this.ingresoEgresoService.borrarIngresoEgreso( item.uid )
         .then( () => {
-          Swal('Eliminado', item.descripcion, 'success');
+          Swal.fire('Eliminado', item.descripcion, 'success');
         });
   }
 

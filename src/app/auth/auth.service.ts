@@ -90,7 +90,7 @@ export class AuthService {
         .catch( error => {
           console.error(error);
           this.store.dispatch( new DesactivarLoadingAction()  );
-          Swal('Error en el login', error.message, 'error');
+          Swal.fire('Error en el login', error.message, 'error');
         });
 
 
@@ -114,7 +114,7 @@ export class AuthService {
         .catch( error => {
           console.error(error);
           this.store.dispatch( new DesactivarLoadingAction()  );
-          Swal('Error en el login', error.message, 'error');
+          Swal.fire('Error en el login', error.message, 'error');
         });
 
   }
