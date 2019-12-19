@@ -21,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
@@ -41,6 +42,7 @@ import { AppComponent } from './app.component';
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
