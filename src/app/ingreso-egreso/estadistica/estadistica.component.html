@@ -1,9 +1,31 @@
 
-<div class="row m-5"> 
 
+<div class="row  m-5">
+
+  <div class="col-12">
+      <div class="card card-statistics">
+
+      <div class="card-body">
+
+
+
+    <!-- https://dalelotts.github.io/angular-bootstrap-datetimepicker/components/DlDateTimePickerComponent.html -->
+  
+    <dl-date-time-picker
+        startView="year"
+        maxView="year"
+        minView="year"
+        minuteStep="2"
+        [(ngModel)]="selectedDate"
+        (change)="onCustomDateChange($event)">
+    </dl-date-time-picker>
+    <p id="selectedDate">Selected Date: {{selectedDate}}</p>
+  </div>
+  </div>
+
+  </div>
 
 </div>
-
 
 <div class="row  m-5">
 

@@ -9,6 +9,7 @@ import { List } from 'linqts';
 
 
 import * as fromIngresoEgreso from '../ingreso-egreso.reducer';
+import { DlDateTimePickerChange } from 'angular-bootstrap-datetimepicker';
 
 
 @Component({
@@ -22,6 +23,8 @@ export class EstadisticaComponent implements OnInit {
     scaleShowVerticalLines: false,
     responsive: true
   };
+
+  selectedDate: Date;
 
   public barChartLabels: String[] = ['Enero', 'Febrero', 'Marzo', 'Abril',
     'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
@@ -40,14 +43,16 @@ export class EstadisticaComponent implements OnInit {
   cuantosIngresos: number;
   cuantosEgresos: number;
 
+  public trasnsacciones = new List<IngresoEgreso>();
+
   subscription: Subscription = new Subscription();
 
   public doughnutChartLabels: string[] = ['Ingresos', 'Egresos'];
   public doughnutChartData: number[] = [];
 
-  
-
-  constructor(private store: Store<fromIngresoEgreso.AppState>) {}
+  constructor(private store: Store<fromIngresoEgreso.AppState>) {
+    this.selectedDate = new Date();
+  }
 
   ngOnInit() {
     this.subscription = this.store.select('ingresoEgreso')
@@ -62,7 +67,19 @@ export class EstadisticaComponent implements OnInit {
   public chartHovered(e: any): void {
   }
 
+  public onCustomDateChange(event: DlDateTimePickerChange<Date>) {
+    this.actualiarGraficas();
+  }
+
   contarIngresoEgreso(items: IngresoEgreso[]) {
+
+    items.forEach(item => {
+      this.trasnsacciones.Add(item);
+    });
+    this.actualiarGraficas();
+  }
+
+  actualiarGraficas() {
 
     this.ingresos = 0;
     this.egresos = 0;
@@ -70,33 +87,38 @@ export class EstadisticaComponent implements OnInit {
     this.cuantosEgresos = 0;
     this.cuantosIngresos = 0;
 
-    const trasnsacciones = new List<IngresoEgreso>();
+    this.cuantosEgresos = this.trasnsacciones.Where(item => item.tipo === 'ingreso').Count();
+    this.ingresos = this.trasnsacciones.Where(item => item.tipo === 'ingreso').Sum(x => x.monto);
 
-    this.cuantosEgresos = trasnsacciones.Where(item => item.tipo === 'ingreso').Count();
-    this.ingresos = trasnsacciones.Where(item => item.tipo === 'ingreso').Sum(x => x.monto);
-
-    items.forEach(item => {
-      trasnsacciones.Add(item);
-    });
+    const newResult = [... this.barChartData];
 
     this.barChartLabels.forEach((item, index) => {
-      console.log(`item:${item} index:${index}`);
-      const ingresos = trasnsacciones.Where(x => x.fechaPago.getFullYear() === 2019 &&
+      const ingresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
                                             x.fechaPago.getMonth() === index && x.tipo === 'ingreso').Sum(x => x.monto);
-      const egresos = trasnsacciones.Where(x => x.fechaPago.getFullYear() === 2019 &&
+      const egresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
         x.fechaPago.getMonth() === index && x.tipo === 'egreso').Sum(x => x.monto);
-        console.log(`ingresos:${ingresos} egresos:${egresos}`);
-      this.barChartData[0].data[index] = ingresos;
-      this.barChartData[1].data[index] = egresos;
+      newResult[0].data[index] = ingresos;
+      newResult[1].data[index] = egresos;
     });
 
-    this.cuantosIngresos = trasnsacciones.Where(item => item.tipo === 'ingreso').Count();
-    this.ingresos = trasnsacciones.Where(item => item.tipo === 'ingreso').Sum(x => x.monto);
+    this.barChartData = [...newResult];
 
-    this.cuantosEgresos = trasnsacciones.Where(item => item.tipo === 'egreso').Count();
-    this.egresos = trasnsacciones.Where(item => item.tipo === 'egreso').Sum(x => x.monto);
 
-    this.doughnutChartData = [ this.ingresos, this.egresos ];
+    this.cuantosIngresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
+                                                          x.tipo === 'ingreso').Count();
+    this.ingresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
+                                              x.tipo === 'ingreso').Sum(x => x.monto);
 
+    this.cuantosEgresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
+                                                    x.tipo === 'egreso').Count();
+    this.egresos = this.trasnsacciones.Where(x => x.fechaPago.getFullYear() === this.selectedDate.getFullYear() &&
+                                             x.tipo === 'egreso').Sum(x => x.monto);
+
+    const newResult1 = [... this.barChartData];
+
+    newResult1[0] = this.ingresos;
+    newResult1[1] = this.egresos;
+
+    this.doughnutChartData = [... newResult1];
   }
 }
