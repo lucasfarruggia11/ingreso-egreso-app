@@ -1,84 +1,67 @@
 
 
-<div class="row  m-5">
+<div class="row  m-2">
 
   <div class="col-12">
       <div class="card card-statistics">
+          <div class="card-body">
+              <!-- https://dalelotts.github.io/angular-bootstrap-datetimepicker/components/DlDateTimePickerComponent.html -->
+            
+              <dl-date-time-picker
+                  startView="year"
+                  maxView="year"
+                  minView="year"
+                  [(ngModel)]="selectedDate"
+                  (change)="onCustomDateChange($event)">
+              </dl-date-time-picker>
 
-      <div class="card-body">
-
-
-
-    <!-- https://dalelotts.github.io/angular-bootstrap-datetimepicker/components/DlDateTimePickerComponent.html -->
-  
-    <dl-date-time-picker
-        startView="year"
-        maxView="year"
-        minView="year"
-        minuteStep="2"
-        [(ngModel)]="selectedDate"
-        (change)="onCustomDateChange($event)">
-    </dl-date-time-picker>
-    <p id="selectedDate">Selected Date: {{selectedDate}}</p>
-  </div>
-  </div>
-
+          </div>
+      </div>
   </div>
 
 </div>
 
-<div class="row  m-5">
+<div class="row  m-2">
 
-    <div class="col-6">
+  <div class="col-4">
+      <div class="card card-statistics">
+        <div class="card-body">
+
+          <div class="clearfix">
+            <div class="float-left">
+              <i class="fa fa-money-bill-alt text-success icon-lg"></i>
+            </div>
+            <div class="float-right">
+              <p class="mb-0 text-right">Ingresos ({{ cuantosIngresos }})</p>
+              <div class="fluid-container">
+                <h3 class="font-weight-medium text-right mb-0">{{ ingresos | currency }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4">
         <div class="card card-statistics">
           <div class="card-body">
 
             <div class="clearfix">
               <div class="float-left">
-                <i class="fa fa-money-bill-alt text-success icon-lg"></i>
+                <i class="fa fa-shipping-fast text-danger icon-lg"></i>
               </div>
               <div class="float-right">
-                <p class="mb-0 text-right">Ingresos</p>
+                <p class="mb-0 text-right">Egresos ({{ cuantosEgresos }})</p>
                 <div class="fluid-container">
-                  <h3 class="font-weight-medium text-right mb-0">{{ ingresos | currency }}</h3>
+                  <h3 class="font-weight-medium text-right mb-0">{{ egresos | currency }}</h3>
                 </div>
               </div>
             </div>
-            <p class="text-muted mt-3 mb-0">
-              <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> {{ cuantosIngresos }} ingresos
-            </p>
           </div>
         </div>
       </div>
 
-      <div class="col-6">
-          <div class="card card-statistics">
-            <div class="card-body">
-  
-              <div class="clearfix">
-                <div class="float-left">
-                  <i class="fa fa-shipping-fast text-danger icon-lg"></i>
-                </div>
-                <div class="float-right">
-                  <p class="mb-0 text-right">Ingresos</p>
-                  <div class="fluid-container">
-                    <h3 class="font-weight-medium text-right mb-0">{{ egresos | currency }}</h3>
-                  </div>
-                </div>
-              </div>
-              <p class="text-muted mt-3 mb-0">
-                <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> {{ cuantosEgresos }} egresos
-              </p>
-            </div>
-          </div>
-        </div>
-        
-</div>
-
-
-<div class="row m-5">
-  
-    <div class="col-12">
+      <div class="col-4">
         <div class="card card-statistics">
           <div class="card-body">
   
@@ -87,7 +70,7 @@
                     <i class="fa fa-building text-info icon-lg"></i>
                   </div>
                   <div class="float-right">
-                    <p class="mb-0 text-right">Diferencia</p>
+                    <p class="mb-0 text-right">Saldo</p>
                     <div class="fluid-container">
                       <h3 [ngClass]="{
                         'text-success': ingresos - egresos > 0,
@@ -103,48 +86,47 @@
           
           </div>    
       </div>
-    </div> 
-    
-  
-  </div>
+  </div> 
+      
+</div>
 
-  <div class="row m-5">
+<div class="row m-2">
 
-    <div class="col-6" *ngIf="ingresos > 0 || egresos > 0">
-      <div class="card card-statistics">
-        <div class="card-body">
-          <h1 class="card-title">Gráfica</h1>
+<div class="col-6" *ngIf="ingresos > 0 || egresos > 0">
+  <div class="card card-statistics">
+    <div class="card-body">
+      <h1 class="card-title">Gráfica</h1>
 
-            <div style="display: block">
-                <canvas baseChart
-                        [data]="doughnutChartData"
-                        [labels]="doughnutChartLabels"
-                        chartType="doughnut"></canvas>
-              </div>
-
-
-        </div>
-      </div>
-    </div>  
-
-    <div class="col-6" *ngIf="ingresos > 0 || egresos > 0">
-        <div class="card card-statistics">
-          <div class="card-body">
-            <h1 class="card-title">Gráfica</h1>  
-              
-              <div style="display: block">
-                  <canvas baseChart
-                          [datasets]="barChartData"
-                          [labels]="barChartLabels"
-                          [options]="barChartOptions"
-                          [legend]="barChartLegend"
-                          [chartType]="barChartType"
-                          (chartHover)="chartHovered($event)"
-                          (chartClick)="chartClicked($event)">
-                    </canvas>
-                </div>
+        <div style="display: block">
+            <canvas baseChart
+                    [data]="doughnutChartData"
+                    [labels]="doughnutChartLabels"
+                    chartType="doughnut"></canvas>
           </div>
-        </div>
-      </div> 
 
+
+    </div>
   </div>
+</div>  
+
+<div class="col-6" *ngIf="ingresos > 0 || egresos > 0">
+    <div class="card card-statistics">
+      <div class="card-body">
+        <h1 class="card-title">Gráfica</h1>  
+          
+          <div style="display: block">
+              <canvas baseChart
+                      [datasets]="barChartData"
+                      [labels]="barChartLabels"
+                      [options]="barChartOptions"
+                      [legend]="barChartLegend"
+                      [chartType]="barChartType"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                </canvas>
+            </div>
+      </div>
+    </div>
+  </div> 
+
+</div>
