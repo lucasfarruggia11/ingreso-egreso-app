@@ -30,7 +30,7 @@
     "core-js": "^3.6.0",
     "firebase": "^7.6.1",
     "linqts": "^1.12.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ng2-charts": "^2.3.0",
     "ngx-bootstrap": "^5.2.0",
     "open-iconic": "^1.1.1",
